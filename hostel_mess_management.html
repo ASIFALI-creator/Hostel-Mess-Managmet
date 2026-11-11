@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostel Mess Management & Feedback</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+
+:root{--green:#17664d;--deep:#104936;--mint:#eaf3ee;--ink:#1b2923;--muted:#718078;--line:#e5ebe6;--paper:#fafbf9;--gold:#e7ad3d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif}
+.site-header{height:78px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 max(calc((100% - 1040px)/2),24px);gap:12px}
+.brand{display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none}
+.brand-icon{width:42px;height:42px;display:grid;place-items:center;background:var(--green);color:#fff;border-radius:13px;font:800 14px Manrope}
+.brand small{display:block;color:var(--green);font-size:9px;letter-spacing:1.4px;font-weight:700}
+.brand strong{display:block;font:800 18px Manrope;margin-top:2px}
+.header-status{margin-left:auto;color:var(--muted);font-size:12px}
+.header-status i{display:inline-block;width:8px;height:8px;background:#40a56d;border-radius:50%;margin-right:7px}
+.page{width:min(100% - 40px,1000px);margin:32px auto 65px}
+.hero{background:linear-gradient(115deg,#123e30,#247858);border-radius:22px;padding:38px 44px;color:white;display:flex;align-items:center;justify-content:space-between;overflow:hidden;box-shadow:0 15px 32px #164e3820}
+.eyebrow{font-size:10px;letter-spacing:1.5px;font-weight:700;color:var(--green);margin:0 0 8px}
+.hero .eyebrow{color:#b9deca}
+.hero h1{font:800 clamp(27px,4vw,39px)/1.2 Manrope;margin:0 0 12px}
+.hero h1 em{font-style:normal;color:#c2e8d2}
+.hero-copy{font-size:13px;line-height:1.7;color:#d8ebe1;max-width:550px;margin:0}
+.hero-art{font-size:76px;filter:drop-shadow(0 10px 12px #082b1d55);padding:0 15px}
+.section{margin-top:43px}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.section-title h2{font:800 23px Manrope;margin:0}
+.section-subtitle{font-size:12px;color:var(--muted);margin:7px 0 0}
+.pill{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:30px;padding:9px 13px;font-size:11px;white-space:nowrap}
+.day-tabs{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:15px}
+.day-tab{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:11px;padding:12px 4px;cursor:pointer;font:700 12px 'DM Sans';transition:.18s}
+.day-tab small{display:block;font-size:9px;font-weight:500;margin-top:4px;opacity:.8}
+.day-tab:hover{border-color:#9bbcac}
+.day-tab.active{background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 5px 13px #17664d24}
+.meal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.meal-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px;display:flex;align-items:center;gap:13px;min-height:91px}
+.meal-icon{width:43px;height:43px;flex:0 0 43px;border-radius:12px;background:var(--mint);display:grid;place-items:center;font-size:21px}
+.meal-info{min-width:0}
+.meal-info h3{font:700 14px Manrope;margin:0 0 5px}
+.meal-info p{font-size:11px;color:var(--muted);line-height:1.5;margin:0}
+.meal-time{margin-left:auto;white-space:nowrap;font-size:9px;font-weight:700;color:var(--green);background:#f0f7f2;border-radius:20px;padding:6px 8px}
+.special{margin-top:21px;background:#fff8e9;border:1px solid #f0e2c4;border-radius:16px;padding:18px 22px;display:flex;align-items:center;gap:15px}
+.special-star{width:42px;height:42px;border-radius:13px;background:#ffefca;color:#b47b17;display:grid;place-items:center;font-size:24px}
+.special-copy .eyebrow{color:#a87820;margin-bottom:4px}
+.special-copy h3{font:700 16px Manrope;margin:0 0 4px}
+.special-copy p:last-child{font-size:11px;color:#806e4c;margin:0}
+.special-label{margin-left:auto;border:1px solid #ead7ac;color:#987023;border-radius:20px;padding:7px 10px;font-size:9px;font-weight:700;white-space:nowrap}
+.feedback-section{margin-top:48px}
+.feedback-symbol{font-size:30px;color:var(--green);background:var(--mint);width:45px;height:45px;border-radius:14px;display:grid;place-items:center}
+.feedback-card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:24px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.field{display:flex;flex-direction:column;margin-bottom:17px}
+.field label{font-size:12px;font-weight:700;margin-bottom:9px}
+.field select,.field textarea{width:100%;border:1px solid #dfe6e0;border-radius:10px;padding:12px;background:#fcfdfb;font:13px 'DM Sans';color:var(--ink);outline:none}
+.field select:focus,.field textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px #17664d15}
+.field textarea{resize:vertical}
+.stars{display:flex;gap:5px;height:34px}
+.stars button{border:0;background:none;color:#d9dfda;font-size:28px;padding:0 2px;cursor:pointer}
+.stars button.active{color:var(--gold)}
+.field small{font-size:10px;color:#929d96;margin-top:5px}
+.char-count{text-align:right}
+.submit-row{display:flex;align-items:center;justify-content:space-between;gap:15px}
+#formMessage{font-size:11px;color:var(--green);margin:0;min-height:15px}
+.submit-button{background:var(--green);color:#fff;border:0;border-radius:9px;padding:12px 17px;font:700 12px 'DM Sans';cursor:pointer}
+.submit-button:hover{background:var(--deep)}
+.submit-button span{font-size:17px;margin-left:9px;vertical-align:-1px}
+.recent-section{margin-top:48px}
+.reviews{display:grid;gap:10px}
+.review{background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px 18px}
+.review-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:7px}
+.review-meal{font-size:12px;font-weight:700}
+.review-stars{color:var(--gold);letter-spacing:2px}
+.review p{font-size:12px;color:var(--muted);line-height:1.5;margin:0 0 7px;overflow-wrap:anywhere}
+.review time{font-size:10px;color:#9aa49e}
+.empty-state{background:#fff;border:1px dashed #d9e2dc;border-radius:13px;padding:23px;text-align:center;color:var(--muted);font-size:12px}
+footer{border-top:1px solid var(--line);background:#fff;text-align:center;padding:23px;display:flex;flex-direction:column;gap:5px}
+footer strong{font:700 12px Manrope}
+footer span{font-size:10px;color:var(--muted)}
+@media(max-width:650px){.page{width:calc(100% - 26px);margin-top:18px}.hero{padding:26px 23px;border-radius:17px}.hero-art{font-size:48px;padding:0}.hero-copy{font-size:11px}.day-tabs{gap:4px}.day-tab{font-size:10px;padding:10px 2px}.day-tab small{font-size:8px}.meal-grid{grid-template-columns:1fr}.meal-card{padding:14px}.special{padding:15px}.special-label{display:none}.section-title h2{font-size:20px}.form-row{grid-template-columns:1fr;gap:0}.feedback-card{padding:18px}}
+@media(max-width:390px){.header-status{font-size:0}.hero-art{display:none}.meal-time{font-size:8px;padding:5px}}
+
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#"><span class="brand-icon">HM</span><span><small>STUDENT PORTAL</small><strong>Hostel Mess</strong></span></a>
+    <span class="header-status"><i></i> Weekly menu available</span>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">HOSTEL DINING, MADE SIMPLE</p>
+        <h1>Know your menu.<br><em>Share your feedback.</em></h1>
+        <p class="hero-copy">View the weekly mess schedule, check today's special, and help us make every meal better.</p>
+      </div>
+      <div class="hero-art" aria-hidden="true">🍽️</div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <div><p class="eyebrow">PLAN YOUR WEEK</p><h2>Weekly meal menu</h2></div>
+        <span class="pill">Monday – Sunday</span>
+      </div>
+      <nav class="day-tabs" id="dayTabs" aria-label="Select a day"></nav>
+      <div class="meal-grid" id="mealGrid"></div>
+    </section>
+
+    <section class="special">
+      <div class="special-star">✦</div>
+      <div class="special-copy">
+        <p class="eyebrow">TODAY'S SPECIAL</p>
+        <h3 id="specialName">Chef's special</h3>
+        <p id="specialNote">A delicious highlight selected for today.</p>
+      </div>
+      <span class="special-label">MESS PICK</span>
+    </section>
+
+    <section class="section feedback-section">
+      <div class="section-title">
+        <div><p class="eyebrow">HELP US IMPROVE</p><h2>Meal feedback</h2><p class="section-subtitle">Rate your meal and leave a comment for the mess team.</p></div>
+        <span class="feedback-symbol">✎</span>
+      </div>
+      <form id="feedbackForm" class="feedback-card">
+        <div class="form-row">
+          <div class="field">
+            <label for="mealType">Select meal</label>
+            <select id="mealType" required>
+              <option value="">Choose a meal</option>
+              <option>Breakfast</option><option>Lunch</option>
+              <option>Evening Snacks</option><option>Dinner</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Rate your experience</label>
+            <div class="stars" id="starRating" aria-label="Choose a rating">
+              <button type="button" data-value="1" aria-label="1 star">★</button>
+              <button type="button" data-value="2" aria-label="2 stars">★</button>
+              <button type="button" data-value="3" aria-label="3 stars">★</button>
+              <button type="button" data-value="4" aria-label="4 stars">★</button>
+              <button type="button" data-value="5" aria-label="5 stars">★</button>
+            </div>
+            <small id="ratingHint">Select 1 to 5 stars</small>
+          </div>
+        </div>
+        <div class="field">
+          <label for="reviewText">Review / suggestions</label>
+          <textarea id="reviewText" rows="4" maxlength="350" placeholder="Share what you liked or what we can improve..."></textarea>
+          <small class="char-count" id="charCount">0 / 350</small>
+        </div>
+        <div class="submit-row">
+          <p id="formMessage" role="status"></p>
+          <button class="submit-button" type="submit">Submit feedback <span>→</span></button>
+        </div>
+      </form>
+    </section>
+
+    <section class="section recent-section">
+      <div class="section-title"><div><p class="eyebrow">COMMUNITY VOICE</p><h2>Recent reviews</h2></div><span class="pill" id="reviewCount">0 reviews</span></div>
+      <div id="reviews" class="reviews">
+        <p class="empty-state">No reviews yet. Your feedback can be the first!</p>
+      </div>
+    </section>
+  </main>
+
+  <footer><strong>Hostel Mess Management & Feedback System</strong><span>Better meals start with your feedback.</span></footer>
+  <script>
+// Sample weekly menu. Edit these dishes and timings to match your hostel.
+const weeklyMenu = {
+  Monday: [
+    ["Breakfast","🍳","Aloo paratha, curd and tea","7:30–9:00 AM"],
+    ["Lunch","🍛","Dal tadka, jeera rice, roti and salad","12:30–2:00 PM"],
+    ["Evening Snacks","🥪","Vegetable sandwich and tea","4:30–5:30 PM"],
+    ["Dinner","🥘","Mix veg, chapati, rice and kheer","7:30–9:00 PM"]
+  ],
+  Tuesday: [
+    ["Breakfast","🥣","Poha, banana and milk","7:30–9:00 AM"],
+    ["Lunch","🍲","Rajma, steamed rice, roti and salad","12:30–2:00 PM"],
+    ["Evening Snacks","🍜","Veg noodles and tea","4:30–5:30 PM"],
+    ["Dinner","🍛","Chana masala, roti and raita","7:30–9:00 PM"]
+  ],
+  Wednesday: [
+    ["Breakfast","🥞","Masala dosa, chutney and sambar","7:30–9:00 AM"],
+    ["Lunch","🍛","Kadhi pakora, rice, roti and salad","12:30–2:00 PM"],
+    ["Evening Snacks","🍔","Veg burger and tea","4:30–5:30 PM"],
+    ["Dinner","🥗","Paneer bhurji, chapati and dal","7:30–9:00 PM"]
+  ],
+  Thursday: [
+    ["Breakfast","🍞","Bread, butter, omelette and milk","7:30–9:00 AM"],
+    ["Lunch","🍚","Veg pulao, dal fry and raita","12:30–2:00 PM"],
+    ["Evening Snacks","🥟","Samosa and mint chutney","4:30–5:30 PM"],
+    ["Dinner","🍲","Aloo gobi, dal, roti and rice","7:30–9:00 PM"]
+  ],
+  Friday: [
+    ["Breakfast","🫓","Chole kulche and tea","7:30–9:00 AM"],
+    ["Lunch","🍛","Kadhi, rice, roti and salad","12:30–2:00 PM"],
+    ["Evening Snacks","🍕","Veg pizza slice and juice","4:30–5:30 PM"],
+    ["Dinner","🍜","Veg noodles, Manchurian and soup","7:30–9:00 PM"]
+  ],
+  Saturday: [
+    ["Breakfast","🥪","Vegetable upma, toast and tea","7:30–9:00 AM"],
+    ["Lunch","🍛","Dal makhani, rice, roti and salad","12:30–2:00 PM"],
+    ["Evening Snacks","🍟","Masala fries and tea","4:30–5:30 PM"],
+    ["Dinner","🍽️","Special thali with dessert","7:30–9:00 PM"]
+  ],
+  Sunday: [
+    ["Breakfast","🥞","Chole bhature and curd","8:00–9:30 AM"],
+    ["Lunch","🍚","Veg biryani, raita and salad","1:00–2:30 PM"],
+    ["Evening Snacks","🍰","Cake and cold drink","4:30–5:30 PM"],
+    ["Dinner","🥘","Seasonal vegetables, dal, roti and rice","7:30–9:00 PM"]
+  ]
+};
+
+const dailySpecials = {
+  Monday:["Kheer","A traditional dessert served with the evening meal."],
+  Tuesday:["Fresh fruit bowl","A refreshing selection of seasonal fruits."],
+  Wednesday:["Paneer tikka","A flavourful chef-prepared special."],
+  Thursday:["Sweet lassi","A cool and creamy drink."],
+  Friday:["Vegetable pulao","Fragrant rice cooked with fresh vegetables."],
+  Saturday:["Special thali","A weekend meal with a variety of dishes."],
+  Sunday:["Gulab jamun","A classic sweet treat to finish the week."]
+};
+
+const days = Object.keys(weeklyMenu);
+let activeDay = days.includes(new Intl.DateTimeFormat("en-US",{weekday:"long"}).format(new Date()))
+  ? new Intl.DateTimeFormat("en-US",{weekday:"long"}).format(new Date()) : "Monday";
+let currentRating = 0;
+
+const tabs = document.getElementById("dayTabs");
+const mealGrid = document.getElementById("mealGrid");
+
+function renderTabs(){
+  tabs.innerHTML = "";
+  days.forEach((day,index)=>{
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "day-tab" + (day===activeDay ? " active" : "");
+    button.setAttribute("aria-pressed",day===activeDay);
+    button.innerHTML = `${day.slice(0,3)}<small>Day ${index+1}</small>`;
+    button.addEventListener("click",()=>{activeDay=day;renderTabs();renderMeals();});
+    tabs.appendChild(button);
+  });
+}
+
+function renderMeals(){
+  mealGrid.innerHTML = "";
+  weeklyMenu[activeDay].forEach(([name,emoji,dishes,time])=>{
+    const card = document.createElement("article");
+    card.className = "meal-card";
+    const icon = document.createElement("div");
+    icon.className = "meal-icon";
+    icon.textContent = emoji;
+    const info = document.createElement("div");
+    info.className = "meal-info";
+    const heading = document.createElement("h3");
+    heading.textContent = name;
+    const description = document.createElement("p");
+    description.textContent = dishes;
+    info.append(heading,description);
+    const timing = document.createElement("span");
+    timing.className = "meal-time";
+    timing.textContent = time;
+    card.append(icon,info,timing);
+    mealGrid.appendChild(card);
+  });
+  document.getElementById("specialName").textContent = dailySpecials[activeDay][0];
+  document.getElementById("specialNote").textContent = dailySpecials[activeDay][1];
+}
+
+function chooseRating(value){
+  currentRating = value;
+  document.querySelectorAll("#starRating button").forEach(button=>{
+    const isSelected = Number(button.dataset.value) <= value;
+    button.classList.toggle("active",isSelected);
+    button.setAttribute("aria-pressed",Number(button.dataset.value)===value);
+  });
+  document.getElementById("ratingHint").textContent = `${value} out of 5 stars selected`;
+}
+document.querySelectorAll("#starRating button").forEach(button=>{
+  button.addEventListener("click",()=>chooseRating(Number(button.dataset.value)));
+});
+
+const reviewInput = document.getElementById("reviewText");
+reviewInput.addEventListener("input",()=>{
+  document.getElementById("charCount").textContent = `${reviewInput.value.length} / 350`;
+});
+
+function loadReviews(){
+  try{return JSON.parse(localStorage.getItem("hostelMessReviews")||"[]");}
+  catch(error){return [];}
+}
+function renderReviews(){
+  const reviews = loadReviews();
+  const container = document.getElementById("reviews");
+  document.getElementById("reviewCount").textContent = `${reviews.length} ${reviews.length===1?"review":"reviews"}`;
+  container.innerHTML = "";
+  if(!reviews.length){
+    const empty = document.createElement("p");
+    empty.className = "empty-state";
+    empty.textContent = "No reviews yet. Your feedback can be the first!";
+    container.appendChild(empty);
+    return;
+  }
+  reviews.slice().reverse().forEach(review=>{
+    const article = document.createElement("article");
+    article.className = "review";
+    const head = document.createElement("div");
+    head.className = "review-head";
+    const meal = document.createElement("strong");
+    meal.className = "review-meal";
+    meal.textContent = review.meal;
+    const stars = document.createElement("span");
+    stars.className = "review-stars";
+    stars.textContent = "★".repeat(review.rating)+"☆".repeat(5-review.rating);
+    head.append(meal,stars);
+    const comment = document.createElement("p");
+    comment.textContent = review.comment || "No written comment.";
+    const date = document.createElement("time");
+    date.textContent = new Date(review.createdAt).toLocaleString();
+    article.append(head,comment,date);
+    container.appendChild(article);
+  });
+}
+
+document.getElementById("feedbackForm").addEventListener("submit",event=>{
+  event.preventDefault();
+  const meal = document.getElementById("mealType").value;
+  const message = document.getElementById("formMessage");
+  if(!meal){message.textContent="Please select a meal.";return;}
+  if(!currentRating){message.textContent="Please select a star rating.";return;}
+  const reviews = loadReviews();
+  reviews.push({meal,rating:currentRating,comment:reviewInput.value.trim(),createdAt:new Date().toISOString()});
+  try{localStorage.setItem("hostelMessReviews",JSON.stringify(reviews));}
+  catch(error){message.textContent="Could not save feedback in this browser.";return;}
+  renderReviews();
+  event.target.reset();
+  reviewInput.value="";
+  document.getElementById("charCount").textContent="0 / 350";
+  chooseRating(0);
+  document.getElementById("ratingHint").textContent="Select 1 to 5 stars";
+  message.textContent="Thank you! Your feedback has been saved on this device.";
+});
+
+renderTabs();
+renderMeals();
+renderReviews();
+
+  </script>
+</body>
+</html>
